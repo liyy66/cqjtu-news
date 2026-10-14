@@ -46,6 +46,20 @@ CHANNELS = [
 S = requests.Session()
 S.headers.update(HEAD)
 
+
+def _soup(content):
+    """构造 BeautifulSoup，lxml 缺失时自动退回内置解析器。
+
+    lxml 已在 requirements.txt 里显式声明；但云端环境偶尔会缺包，
+    直接写死 "lxml" 会抛 FeatureNotFound 让整轮抓取中断，
+    所以这里做一次探测 + 兜底。
+    """
+    try:
+        return BeautifulSoup(content, "lxml")
+    except Exception:
+        return BeautifulSoup(content, "html.parser")
+
+
 DATE_RE = re.compile(r"(20\d{2})[-/年.](\d{1,2})[-/月.](\d{1,2})")
 ITEM_RE = re.compile(r'(?:\.\./|\./)?info/\d+/\d+\.htm')
 SITE_SUFFIX = re.compile(r"\s*[-–—|]\s*重庆交通大学(?:新闻网|官网)\s*$")
@@ -85,7 +99,7 @@ def parse_list(url):
     content = get(url)
     if not content:
         return [], 0
-    soup = BeautifulSoup(content, "lxml")
+    soup = _soup(content)
     out = []
     for a in soup.find_all("a", href=True):
         href = a["href"]
@@ -123,7 +137,7 @@ def parse_article(url):
     content = get(url, retries=2)
     if not content:
         return None
-    soup = BeautifulSoup(content, "lxml")
+    soup = _soup(content)
     title = ""
     for sel in ["h1", "h2", ".articleTitle", "title"]:
         el = soup.select_one(sel)
