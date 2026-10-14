@@ -33,14 +33,14 @@ GitHub Pages 自动发布
 
 ### 2. 把代码推上去
 
-在本机项目目录执行（已安装 git，仓库内文件已就绪）：
+本机已完成 `git init`、`.gitignore` 配置和首次提交，**只剩建远程仓库和推送**：
+
+1. 在 github.com 新建空仓库 `cqjtu-news`（Public）。
+   **不要**勾选自动创建 README，否则会与本地提交冲突。
+2. 回到本机目录执行：
 
 ```bash
 cd C:\Users\td\WorkBuddy\2026-10-12-22-31-04
-git init
-git add .
-git commit -m "init: 重庆交通大学资讯助手"
-git branch -M main
 git remote add origin https://github.com/<你的用户名>/cqjtu-news.git
 git push -u origin main
 ```
@@ -83,9 +83,13 @@ scripts/crawl_news.py          列表页 + 正文抓取
 scripts/daily_update.py        增量更新 + 打包（断点续传）
 scripts/build_site.py          生成分片
 scripts/repo_state.py          状态文件转换（见下）
-state/news.jsonl               增量基线（已入库文章）
-site/                          站点成品，Pages 发布的就是它
+state/news.jsonl               增量基线（已入库文章，约 7MB）
+site/index.html                站点入口
+site/data/qa.json              问答库与栏目配置
 ```
+
+入库的**只有**上面这些：脚本、配置、页面和一份状态基线。
+本机工作区私有内容（`.workbuddy/` 自动化日志与笔记、抓取中间产物）已在 `.gitignore` 中排除，不会进公开仓库。
 
 ### 关于 state/news.jsonl
 
