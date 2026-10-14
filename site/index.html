@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#0d5c4a">
+<title>重庆交通大学 · 官方资讯助手</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --green:#0d5c4a;--green-l:#17876e;--green-soft:#e6f2ee;
+  --gold:#c8a45c;--ink:#1a2320;--ink-2:#4a5a54;--ink-3:#87968f;
+  --line:#e3eae7;--bg:#f5f7f6;--card:#fff;
+  --shadow:0 1px 3px rgba(16,40,33,.06),0 8px 24px rgba(16,40,33,.06);
+  --r:14px;--safe-b:env(safe-area-inset-bottom,0px);
+}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.65;font-size:15px;
+  padding-bottom:calc(64px + var(--safe-b));overflow-x:hidden;width:100%;max-width:100vw;
+}
+a{color:var(--green-l);text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ---------- 顶栏 ---------- */
+header{
+  background:linear-gradient(135deg,#0d5c4a 0%,#12705a 55%,#1a8a6d 100%);
+  color:#fff;padding:18px 16px 14px;position:relative;overflow:hidden;
+}
+header::after{
+  content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%;
+}
+.hd-top{display:flex;align-items:center;gap:11px;position:relative;z-index:1}
+.logo{
+  width:42px;height:42px;border-radius:11px;background:rgba(255,255,255,.16);
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;
+  border:1px solid rgba(255,255,255,.2);
+}
+h1{font-size:17px;font-weight:600;letter-spacing:.3px}
+.hd-sub{font-size:11.5px;opacity:.82;margin-top:2px}
+.hd-stat{
+  display:flex;gap:8px;margin-top:14px;position:relative;z-index:1;
+}
+.hd-stat div{
+  flex:1;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;padding:8px 6px;text-align:center;backdrop-filter:blur(4px);
+}
+.hd-stat b{display:block;font-size:16px;font-weight:600;letter-spacing:.5px}
+.hd-stat span{font-size:10.5px;opacity:.8}
+
+/* ---------- 标签栏 ---------- */
+nav{
+  position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;padding:0 4px;box-shadow:0 1px 6px rgba(0,0,0,.04);
+}
+nav button{
+  flex:1;background:none;border:0;padding:13px 4px 11px;font-size:14.5px;
+  color:var(--ink-2);cursor:pointer;position:relative;font-family:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s;
+}
+nav button .ic{font-size:17px;line-height:1}
+nav button.on{color:var(--green);font-weight:600}
+nav button.on::after{
+  content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:26px;height:2.5px;background:var(--green);border-radius:2px;
+}
+
+main{max-width:760px;margin:0 auto;padding:14px 12px 24px;width:100%}
+section{display:none;animation:fade .28s ease}
+section.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- 卡片 ---------- */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:15px;margin-bottom:12px}
+.card-t{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:11px;padding-bottom:10px;border-bottom:1px solid var(--line);
+}
+.card-t h2{font-size:15px;font-weight:600;display:flex;align-items:center;gap:6px}
+.card-t h2::before{content:"";width:3px;height:14px;background:var(--green);border-radius:2px}
+.card-t .more{font-size:12px;color:var(--ink-3)}
+
+/* ---------- 问答 ---------- */
+.ask-box{position:relative}
+.ask-box input{
+  width:100%;padding:12px 42px 12px 38px;border:1.5px solid var(--line);
+  border-radius:11px;font-size:15px;background:#fafcfb;font-family:inherit;
+  outline:none;transition:border-color .2s;
+}
+.ask-box input:focus{border-color:var(--green-l);background:#fff}
+.ask-box .si{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;opacity:.45}
+.ask-box .clr{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);width:22px;height:22px;
+  border:0;background:#c8d2cd;color:#fff;border-radius:50%;cursor:pointer;
+  font-size:13px;line-height:1;display:none;align-items:center;justify-content:center;
+}
+.ask-box.has .clr{display:flex}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.chip{
+  padding:6px 12px;background:var(--green-soft);color:var(--green);border-radius:20px;
+  font-size:12.5px;cursor:pointer;border:1px solid transparent;transition:.18s;font-family:inherit;
+}
+.chip:active{transform:scale(.95)}
+.chip:hover{background:var(--green);color:#fff}
+
+.qa-item{padding:13px 0;border-bottom:1px solid var(--line)}
+.qa-item:last-child{border-bottom:0;padding-bottom:2px}
+.qa-q{font-size:14.5px;font-weight:600;margin-bottom:7px;display:flex;gap:7px;line-height:1.5}
+.qa-q .n{
+  flex-shrink:0;width:20px;height:20px;background:var(--green);color:#fff;border-radius:6px;
+  font-size:11.5px;display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.qa-a{font-size:13.5px;color:var(--ink-2);white-space:pre-wrap;line-height:1.78;padding-left:27px}
+.qa-src{
+  margin:9px 0 0 27px;padding:8px 11px;background:#f7faf9;border:1px solid var(--line);
+  border-left:3px solid var(--green-l);border-radius:0 8px 8px 0;font-size:12px;
+}
+.qa-src .lb{color:var(--ink-3);display:block;margin-bottom:3px}
+.qa-src a{font-weight:500;word-break:break-all;display:inline-flex;align-items:center;gap:4px}
+.qa-src a::after{content:"↗";font-size:11px;opacity:.6}
+mark{background:#fff3c4;color:inherit;padding:0 1px;border-radius:2px}
+.empty{text-align:center;padding:34px 16px;color:var(--ink-3);font-size:13.5px}
+.empty .e{font-size:34px;margin-bottom:10px;opacity:.35}
+
+/* ---------- 新闻 ---------- */
+.date-nav{
+  display:flex;gap:8px;align-items:center;background:var(--card);padding:11px 13px;
+  border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:12px;
+}
+.date-nav button{
+  width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:16px;color:var(--ink-2);cursor:pointer;flex-shrink:0;font-family:inherit;
+}
+.date-nav button:disabled{opacity:.32;cursor:default}
+.date-nav .cur{flex:1;text-align:center;font-size:14px;font-weight:600}
+.date-nav .cur small{display:block;font-size:11px;color:var(--ink-3);font-weight:400}
+
+.news-item{
+  display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer;
+}
+.news-item:last-child{border-bottom:0}
+.news-item .th{
+  flex:1;min-width:0;
+}
+.news-item h3{font-size:14.5px;font-weight:500;line-height:1.5;margin-bottom:5px;color:var(--ink)}
+.news-item p{
+  font-size:12.5px;color:var(--ink-3);line-height:1.55;margin-bottom:6px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;font-size:11.5px;color:var(--ink-3)}
+.tag{background:var(--green-soft);color:var(--green);padding:2px 8px;border-radius:5px;font-weight:500}
+.thumb{
+  width:78px;height:58px;border-radius:9px;object-fit:cover;flex-shrink:0;background:#eef2f0;
+}
+
+.filters{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filters .f{
+  padding:6px 13px;background:#fff;border:1px solid var(--line);border-radius:20px;
+  font-size:12.5px;white-space:nowrap;cursor:pointer;color:var(--ink-2);font-family:inherit;flex-shrink:0;
+}
+.filters .f.on{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* 搜索 */
+.srch{position:relative;margin-bottom:12px}
+.srch input{
+  width:100%;padding:12px 14px 12px 38px;border:1.5px solid var(--line);border-radius:11px;
+  font-size:15px;background:#fff;font-family:inherit;outline:none;
+}
+.srch input:focus{border-color:var(--green-l)}
+.srch .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.45}
+.srch .clr{
+  position:absolute;right:11px;top:50%;transform:translateY(-50%);width:22px;height:22px;
+  border:0;background:#c8d2cd;color:#fff;border-radius:50%;cursor:pointer;display:none;
+  align-items:center;justify-content:center;font-size:13px;
+}
+.srch.has .clr{display:flex}
+.picker{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.picker input[type=date]{
+  padding:8px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:13px;
+  font-family:inherit;background:#fff;outline:none;flex:1;min-width:130px;
+}
+.picker input:focus{border-color:var(--green-l)}
+.btn-s{
+  padding:8px 15px;background:var(--green);color:#fff;border:0;border-radius:9px;
+  font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;
+}
+.btn-s:active{background:var(--green-l)}
+
+/* ---------- 阅读页 ---------- */
+.reader{position:fixed;inset:0;background:#fff;z-index:100;display:none;flex-direction:column}
+.reader.on{display:flex}
+.rd-bar{
+  background:var(--green);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.rd-bar button{
+  width:32px;height:32px;border:0;background:rgba(255,255,255,.18);color:#fff;border-radius:9px;
+  font-size:17px;cursor:pointer;flex-shrink:0;
+}
+.rd-bar .rt{flex:1;text-align:center;font-size:13px;opacity:.9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rd-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 18px 40px}
+.rd-body h1{font-size:20px;line-height:1.45;margin-bottom:12px;font-weight:600}
+.rd-meta{
+  display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--ink-3);
+  padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--line);
+}
+.rd-content{font-size:15.5px;line-height:1.95;white-space:pre-wrap;word-break:break-word}
+.rd-content img{margin:12px auto;border-radius:10px;max-width:100%}
+.rd-src{
+  margin-top:26px;padding:13px;background:#f7faf9;border:1px solid var(--line);border-radius:11px;
+}
+.rd-src .t{font-size:12px;color:var(--ink-3);margin-bottom:5px}
+.rd-src a{font-size:12.5px;word-break:break-all;display:inline-flex;align-items:center;gap:4px}
+.rd-src a::after{content:"↗";font-size:11px}
+.loading{text-align:center;padding:40px;color:var(--ink-3);font-size:13px}
+.spin{
+  width:24px;height:24px;border:2.5px solid var(--line);border-top-color:var(--green);
+  border-radius:50%;margin:0 auto 12px;animation:sp .8s linear infinite;
+}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+footer{
+  text-align:center;padding:20px 16px calc(20px + var(--safe-b));color:var(--ink-3);
+  font-size:11.5px;line-height:1.9;
+}
+footer a{color:var(--ink-3);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-top">
+    <div class="logo">🚄</div>
+    <div style="flex:1;min-width:0">
+      <h1>重庆交通大学</h1>
+      <div class="hd-sub">官方资讯助手 · 数据全部来自学校官方渠道</div>
+    </div>
+  </div>
+  <div class="hd-stat" id="hdStat">
+    <div><b id="sTotal">—</b><span>收录新闻</span></div>
+    <div><b id="sFrom">—</b><span>起始日期</span></div>
+    <div><b id="sQa">—</b><span>问答条目</span></div>
+  </div>
+</header>
+
+<nav>
+  <button data-tab="qa" class="on"><span class="ic">💬</span>AI问答</button>
+  <button data-tab="feed"><span class="ic">📰</span>新闻推送</button>
+  <button data-tab="search"><span class="ic">🔎</span>新闻查询</button>
+  <button data-tab="about"><span class="ic">ℹ️</span>官方入口</button>
+</nav>
+
+<main>
+  <!-- ============ AI 问答 ============ -->
+  <section id="tab-qa" class="on">
+    <div class="card">
+      <div class="ask-box" id="askBox">
+        <span class="si">💬</span>
+        <input type="search" id="askInput" placeholder="问点什么，如：有哪些博士点 / 学费多少" autocomplete="off">
+        <button class="clr" id="askClr">✕</button>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="card">
+      <div class="card-t">
+        <h2 id="qaTitle">全部问答</h2>
+        <span class="more" id="qaCount"></span>
+      </div>
+      <div id="qaList"><div class="loading"><div class="spin"></div>加载中…</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 新闻推送 ============ -->
+  <section id="tab-feed">
+    <div class="date-nav">
+      <button id="prevDay">‹</button>
+      <div class="cur"><span id="curDate">—</span><small id="curWeek"></small></div>
+      <button id="nextDay">›</button>
+    </div>
+    <div class="filters" id="feedFilter"></div>
+    <div class="card">
+      <div class="card-t"><h2>当日新闻</h2><span class="more" id="feedCount"></span></div>
+      <div id="feedList"><div class="loading"><div class="spin"></div>加载中…</div></div>
+    </div>
+    <div style="text-align:center;margin:4px 0 16px">
+      <button class="btn-s" id="loadMore">加载更多日期</button>
+    </div>
+  </section>
+
+  <!-- ============ 新闻查询 ============ -->
+  <section id="tab-search">
+    <div class="card">
+      <div class="srch" id="srchBox">
+        <span class="si">🔎</span>
+        <input type="search" id="srchInput" placeholder="按标题/内容关键词搜索历史新闻" autocomplete="off">
+        <button class="clr" id="srchClr">✕</button>
+      </div>
+      <div class="picker">
+        <input type="date" id="pickDate">
+        <button class="btn-s" id="pickGo">查该日新闻</button>
+      </div>
+      <div class="filters" id="srchFilter"></div>
+    </div>
+    <div class="card">
+      <div class="card-t"><h2 id="srchTitle">搜索结果</h2><span class="more" id="srchCount"></span></div>
+      <div id="srchList"><div class="empty"><div class="e">🔍</div>输入关键词，或选择日期查询历史新闻<br><span style="font-size:12px">共收录 2357 篇官方新闻，跨度 2019-01 至今</span></div></div>
+    </div>
+  </section>
+
+  <!-- ============ 官方入口 ============ -->
+  <section id="tab-about">
+    <div class="card">
+      <div class="card-t"><h2>官方平台入口</h2></div>
+      <div id="linkList"></div>
+    </div>
+    <div class="card">
+      <div class="card-t"><h2>新闻栏目</h2></div>
+      <div id="chanList"></div>
+    </div>
+    <div class="card">
+      <div class="card-t"><h2>数据说明</h2></div>
+      <div style="font-size:13px;color:var(--ink-2);line-height:1.9" id="aboutTxt"></div>
+    </div>
+  </section>
+
+  <footer>
+    本站所有内容均采集自重庆交通大学官方网站、新闻网、本科招生网等官方渠道<br>
+    版权归重庆交通大学所有 · 本页面为第三方非官方信息聚合工具<br>
+    <span id="genAt"></span>
+  </footer>
+</main>
+
+<!-- 阅读器 -->
+<div class="reader" id="reader">
+  <div class="rd-bar">
+    <button id="rdBack">‹</button>
+    <div class="rt" id="rdTitle">阅读</div>
+    <button id="rdOpen" title="在官网查看原文">↗</button>
+  </div>
+  <div class="rd-body" id="rdBody">
+    <div class="loading"><div class="spin"></div>加载中…</div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+let IDX = null, QA = null, ALL = null;
+let chunkCache = {};
+let curTab = 'qa';
+let feedDate = null, feedChan = 'all', feedShown = 0;
+let srchChan = 'all';
+
+// ---------- 启动 ----------
+(async function init(){
+  try{
+    // 先加载轻量数据，问答与推送立即可用
+    const [i, q] = await Promise.all([
+      fetch('data/index.json').then(r=>r.json()),
+      fetch('data/qa.json').then(r=>r.json())
+    ]);
+    IDX = i; QA = q;
+    $('#sTotal').textContent = IDX.total.toLocaleString();
+    $('#sFrom').textContent = IDX.dateFrom.slice(0,7);
+    $('#sQa').textContent = QA.qa.length;
+    $('#genAt').textContent = '数据更新时间：' + IDX.generatedAt;
+    feedDate = IDX.dates[0];
+    initQA(); initFeed(); initSearch(); initAbout();
+    // 全量索引体积较大，延后加载，仅查询时需要
+    fetch('data/index-all.json').then(r=>r.json()).then(a=>{ ALL = a; });
+  }catch(e){
+    $('#qaList').innerHTML = '<div class="empty"><div class="e">⚠️</div>数据加载失败<br>请检查网络后刷新</div>';
+  }
+})();
+
+// ---------- Tab ----------
+$$('nav button').forEach(b=>{
+  b.onclick = ()=>{
+    $$('nav button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    $$('section').forEach(s=>s.classList.remove('on'));
+    $('#tab-'+b.dataset.tab).classList.add('on');
+    curTab = b.dataset.tab;
+    window.scrollTo(0,0);
+  };
+});
+
+// ================= AI 问答 =================
+function initQA(){
+  const hot = ['有哪些博士点','有多少学生','学费多少','有哪些学院','就业情况','现任领导','科研平台','图书馆','双一流','地址在哪'];
+  $('#chips').innerHTML = hot.map(q=>`<button class="chip">${q}</button>`).join('');
+  $$('#chips .chip').forEach(c=>c.onclick=()=>{
+    $('#askInput').value = c.textContent;
+    $('#askBox').classList.add('has');
+    doAsk();
+  });
+  $('#askInput').addEventListener('input', e=>{
+    $('#askBox').classList.toggle('has', !!e.target.value);
+  });
+  $('#askClr').onclick = ()=>{
+    $('#askInput').value=''; $('#askBox').classList.remove('has'); renderQA(QA.qa,'');
+  };
+  $('#askInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doAsk(); });
+  renderQA(QA.qa,'');
+}
+
+function doAsk(){
+  const q = $('#askInput').value.trim();
+  if(!q){ renderQA(QA.qa,''); return; }
+  const scored = QA.qa.map(item=>{
+    const hay = item.q + ' ' + item.cat + ' ' + item.a;
+    let s = 0;
+    // 整串匹配权重最高
+    if(item.q.includes(q) || q.includes(item.q)) s += 100;
+    // 分词命中
+    const words = q.split(/[\s,，。？?、\/]+/).filter(w=>w.length>1);
+    words.forEach(w=>{ if(hay.includes(w)) s += 12; });
+    // 逐字命中
+    for(const ch of new Set(q.replace(/[\s,，。？?、\/]/g,''))){
+      if(hay.includes(ch)) s += 1;
+    }
+    return {item, s};
+  }).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
+
+  if(!scored.length){
+    $('#qaTitle').textContent = '没有匹配到官方问答';
+    $('#qaCount').textContent = '';
+    $('#qaList').innerHTML = `<div class="empty"><div class="e">🤔</div>
+      暂未在官方资料中找到「${esc(q)}」的答案<br>
+      <span style="font-size:12px">可换用更短的关键词，或到「官方入口」页直接咨询对应部门</span></div>`;
+    return;
+  }
+  renderQA(scored.slice(0,8).map(x=>x.item), q, scored.length);
+}
+
+function renderQA(list, kw, total){
+  $('#qaTitle').textContent = kw ? `与「${kw}」相关的问答` : '全部问答';
+  $('#qaCount').textContent = kw ? `匹配 ${total} 条，展示前 ${list.length} 条` : `${list.length} 条`;
+  if(!list.length){ $('#qaList').innerHTML = '<div class="empty"><div class="e">📭</div>暂无内容</div>'; return; }
+  $('#qaList').innerHTML = list.map((it,i)=>{
+    let a = esc(it.a);
+    if(kw){
+      const safe = esc(kw).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      if(safe.length>1) a = a.replace(new RegExp(safe,'g'), m=>`<mark>${m}</mark>`);
+    }
+    return `<div class="qa-item">
+      <div class="qa-q"><span class="n">${i+1}</span><span>${esc(it.q)}</span></div>
+      <div class="qa-a">${a}</div>
+      <div class="qa-src">
+        <span class="lb">信息来源 · ${esc(it.cat)}</span>
+        <a href="${it.url}" target="_blank" rel="noopener">${esc(it.src)}</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ================= 新闻推送 =================
+function initFeed(){
+  $('#feedFilter').innerHTML =
+    `<button class="f on" data-c="all">全部</button>` +
+    IDX.channels.map(c=>`<button class="f" data-c="${c.name}">${c.name}</button>`).join('');
+  $$('#feedFilter .f').forEach(b=>b.onclick=()=>{
+    $$('#feedFilter .f').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); feedChan = b.dataset.c; feedShown=0; renderFeed();
+  });
+  $('#prevDay').onclick = ()=>moveDay(-1);
+  $('#nextDay').onclick = ()=>moveDay(1);
+  $('#loadMore').onclick = ()=>{ feedShown += 10; renderFeed(); };
+  renderFeed();
+}
+
+function moveDay(step){
+  const i = IDX.dates.indexOf(feedDate);
+  const j = i + step;
+  if(j<0 || j>=IDX.dates.length) return;
+  feedDate = IDX.dates[j];
+  feedShown = 0;
+  renderFeed();
+}
+
+async function renderFeed(){
+  $('#curDate').textContent = feedDate;
+  const d = new Date(feedDate+'T00:00:00');
+  const wk = ['周日','周一','周二','周三','周四','周五','周六'][d.getDay()];
+  $('#curWeek').textContent = wk;
+  const i = IDX.dates.indexOf(feedDate);
+  $('#prevDay').disabled = i<=0;
+  $('#nextDay').disabled = i<0 || i>=IDX.dates.length-1;
+
+  $('#feedList').innerHTML = '<div class="loading"><div class="spin"></div>加载中…</div>';
+  let arr;
+  try{
+    arr = await fetch('data/feed-'+feedDate+'.json').then(r=>r.json());
+  }catch(e){
+    $('#feedList').innerHTML = '<div class="empty"><div class="e">📭</div>该日无数据</div>';
+    return;
+  }
+  if(feedChan!=='all') arr = arr.filter(x=>x.c===feedChan);
+  feedShown = Math.max(feedShown, 12);
+  const show = arr.slice(0, feedShown);
+  $('#feedCount').textContent = `${feedDate} · ${arr.length} 篇`;
+  if(!arr.length){
+    $('#feedList').innerHTML = `<div class="empty"><div class="e">📰</div>
+      ${feedDate} 没有${feedChan==='all'?'':'「'+feedChan+'」栏目'}新闻<br>
+      <span style="font-size:12px">可点上方箭头切换到有新闻的日期</span></div>`;
+    return;
+  }
+  $('#feedList').innerHTML = show.map(n=>newsHTML(n)).join('')
+    + (feedShown<arr.length ? `<div style="text-align:center;padding:12px 0 0;color:var(--ink-3);font-size:12.5px">已显示 ${show.length} / ${arr.length} 篇</div>` : '');
+  bindNews();
+  $('#loadMore').style.display = feedShown<arr.length ? '' : 'none';
+}
+
+// ================= 新闻查询 =================
+function initSearch(){
+  $('#srchFilter').innerHTML =
+    `<button class="f on" data-c="all">全部栏目</button>` +
+    IDX.channels.map(c=>`<button class="f" data-c="${c.name}">${c.name}</button>`).join('');
+  $$('#srchFilter .f').forEach(b=>b.onclick=()=>{
+    $$('#srchFilter .f').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); srchChan = b.dataset.c; runSearch();
+  });
+  $('#srchInput').addEventListener('input', e=>{
+    $('#srchBox').classList.toggle('has', !!e.target.value);
+  });
+  $('#srchClr').onclick = ()=>{
+    $('#srchInput').value=''; $('#srchBox').classList.remove('has'); runSearch();
+  };
+  $('#srchInput').addEventListener('keydown', e=>{ if(e.key==='Enter') runSearch(); });
+  $('#pickGo').onclick = ()=>{
+    const d = $('#pickDate').value;
+    if(!d){ alert('请先选择一个日期'); return; }
+    if(!IDX.dates.includes(d)){
+      $('#srchTitle').textContent = '该日期无收录';
+      $('#srchCount').textContent = '';
+      $('#srchList').innerHTML = `<div class="empty"><div class="e">📅</div>
+        ${d} 没有收录到新闻<br><span style="font-size:12px">收录范围：${IDX.dateFrom} 至 ${IDX.dateTo}</span></div>`;
+      return;
+    }
+    $('#srchInput').value = '';
+    $('#srchBox').classList.remove('has');
+    runSearch('', d);
+  };
+  ensureAll().then(()=> renderSrch(ALL.slice(0,20), '', d=>d, 20));
+}
+
+function ensureAll(){
+  if(ALL) return Promise.resolve();
+  return fetch('data/index-all.json').then(r=>r.json()).then(a=>{ ALL = a; });
+}
+
+function runSearch(kw, date){
+  kw = (kw!==undefined ? kw : $('#srchInput').value).trim();
+  date = date || $('#pickDate').value || '';
+  $('#srchList').innerHTML = '<div class="loading"><div class="spin"></div>加载中…</div>';
+  ensureAll().then(()=>{
+    let res = ALL.slice();
+    if(date) res = res.filter(x=>x.d===date);
+    if(kw) {
+      const k = kw.toLowerCase();
+      res = res.filter(x=>
+        x.t.toLowerCase().includes(k) ||
+        x.s.toLowerCase().includes(k) ||
+        x.c.toLowerCase().includes(k));
+    }
+    if(srchChan!=='all') res = res.filter(x=>x.c===srchChan);
+    renderSrch(res.slice(0,300), kw, d=>d, res.length, date);
+  }).catch(()=>{
+    $('#srchList').innerHTML = '<div class="empty"><div class="e">⚠️</div>索引加载失败，请刷新重试</div>';
+  });
+}
+
+function renderSrch(list, kw, _u, total, date){
+  const conds = [];
+  if(kw) conds.push('关键词「'+kw+'」');
+  if(date) conds.push('日期 '+date);
+  if(srchChan!=='all') conds.push(srchChan);
+  $('#srchTitle').textContent = conds.length ? conds.join(' + ') : '最新新闻';
+  $('#srchCount').textContent = total ? `共 ${total} 条${total>300?'，显示前 300 条':''}` : '';
+  if(!list.length){
+    $('#srchList').innerHTML = `<div class="empty"><div class="e">🔍</div>
+      没有找到符合条件的新闻<br><span style="font-size:12px">换个关键词或日期试试</span></div>`;
+    return;
+  }
+  $('#srchList').innerHTML = list.map(n=>{
+    const o = {...n};
+    if(kw){
+      const safe = esc(kw).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      o.t = esc(n.t).replace(new RegExp(safe,'gi'), m=>`<mark>${m}</mark>`);
+    } else o.t = esc(n.t);
+    return newsHTML(o);
+  }).join('');
+  bindNews();
+}
+
+function newsHTML(n){
+  return `<div class="news-item" data-id="${n.id}">
+    <div class="th">
+      <h3>${n.t}</h3>
+      ${n.s?`<p>${esc(n.s)}</p>`:''}
+      <div class="meta">
+        <span class="tag">${esc(n.c||'')}</span>
+        <span>${esc(n.d||'')}</span>
+      </div>
+    </div>
+    ${n.img?`<img class="thumb" src="${n.img}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">`:''}
+  </div>`;
+}
+
+function bindNews(){
+  $$('#feedList .news-item, #srchList .news-item').forEach(el=>{
+    el.onclick = ()=>openArticle(el.dataset.id);
+  });
+}
+
+// ================= 官方入口 =================
+function initAbout(){
+  $('#linkList').innerHTML = IDX.officialLinks.map(l=>`
+    <a href="${l.url}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)">
+      <span style="font-size:17px">🔗</span>
+      <span style="flex:1;min-width:0">
+        <span style="display:block;font-size:14px;color:var(--ink);font-weight:500">${esc(l.name)}</span>
+        <span style="display:block;font-size:11.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l.desc)} · ${l.url}</span>
+      </span>
+      <span style="color:var(--ink-3);font-size:15px">›</span>
+    </a>`).join('');
+  $('#chanList').innerHTML = IDX.channels.map(c=>{
+    const st = IDX.chanStat.find(x=>x.name===c.name);
+    return `<a href="${c.url}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)">
+      <span style="flex:1;font-size:14px;color:var(--ink)">${esc(c.name)}</span>
+      ${st?`<span style="font-size:12px;color:var(--ink-3)">${st.n} 篇</span>`:''}
+      <span style="color:var(--ink-3);font-size:15px">›</span>
+    </a>`;
+  }).join('');
+  $('#aboutTxt').innerHTML = `
+    本站为重庆交通大学官方资讯的第三方聚合工具，所有问答答案与新闻内容均来自学校官方渠道：<br><br>
+    · <b>学校主门户</b> www.cqjtu.edu.cn<br>
+    · <b>新闻网</b> news.cqjtu.edu.cn（12 个栏目）<br>
+    · <b>本科招生网</b> zs.cqjtu.edu.cn<br>
+    · <b>信息公开</b> xxgk.cqjtu.edu.cn<br><br>
+    当前共收录 <b>${IDX.total}</b> 篇官方新闻，时间跨度 <b>${IDX.dateFrom}</b> 至 <b>${IDX.dateTo}</b>，
+    含 <b>${QA.qa.length}</b> 条官方问答，每条均标注出处并可点击跳转原文核对。<br><br>
+    <span style="color:var(--ink-3)">如需权威答复，请以学校官方网站及各职能部门发布的信息为准。</span>`;
+}
+
+// ================= 阅读器 =================
+let curArt = null;
+async function openArticle(id){
+  const idx = ALL.find(x=>x.id===id);
+  if(!idx) return;
+  curArt = idx;
+  $('#reader').classList.add('on');
+  $('#rdTitle').textContent = idx.c || '阅读';
+  document.body.style.overflow='hidden';
+  $('#rdBody').innerHTML = `<div class="loading"><div class="spin"></div>加载中…</div>`;
+  $('#rdBody').scrollTop = 0;
+
+  // 找 chunk
+  const ch = IDX.chunks.find(c => id>=c.from && id<=c.to);
+  let art = null;
+  if(ch){
+    if(!chunkCache[ch.f]) chunkCache[ch.f] = await fetch('data/articles/'+ch.f).then(r=>r.json());
+    art = chunkCache[ch.f].find(x=>x.id===id);
+  }
+  if(!art){
+    $('#rdBody').innerHTML = `<h1>${esc(idx.t)}</h1>
+      <div class="rd-meta"><span class="tag">${esc(idx.c)}</span><span>${esc(idx.d)}</span></div>
+      <div class="rd-content">${esc(idx.s)}…</div>` + srcHTML(idx);
+    return;
+  }
+  let html = '';
+  const imgs = new Set(art.img||[]);
+  for(const line of art.body.split('\n')){
+    html += `<p style="margin-bottom:13px">${esc(line)}</p>`;
+    imgs.delete(line.trim());
+  }
+  const extra = Array.from(imgs);
+  $('#rdBody').innerHTML = `
+    <h1>${esc(art.t)}</h1>
+    <div class="rd-meta">
+      <span class="tag">${esc(art.c)}</span>
+      <span>${esc(art.d)}</span>
+      <span>重庆交通大学新闻网</span>
+    </div>
+    <div class="rd-content">${html}</div>
+    ${extra.length?`<div style="margin-top:8px">${extra.map(u=>`<img src="${u}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`).join('')}</div>`:''}
+    ${srcHTML(art)}`;
+  $('#rdBody').scrollTop = 0;
+}
+
+function srcHTML(a){
+  return `<div class="rd-src">
+    <div class="t">本文出处 · 重庆交通大学官方发布（点击前往原网页核对）</div>
+    <a href="${a.u}" target="_blank" rel="noopener">${a.u}</a>
+  </div>`;
+}
+
+function closeReader(){
+  $('#reader').classList.remove('on');
+  document.body.style.overflow='';
+  curArt = null;
+}
+$('#rdBack').onclick = closeReader;
+$('#rdOpen').onclick = ()=>{ if(curArt) window.open(curArt.u,'_blank'); };
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+</html>

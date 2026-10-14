@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# 抓取状态与构建产物：体积大且每轮都在变，
+# 真源保存在 state/news.jsonl 与 site-data 分支里，不进主分支历史。
+data/news.json
+data/_list.json
+data/_last_update.json
+site/data/articles/
+site/data/feed-*.json
+site/data/index.json
+site/data/index-all.json
+
+# 本地工作区私有内容：自动化日志、记忆笔记、应用配置，
+# 属于本机运行痕迹，不应进入公开仓库。
+.workbuddy/
+
+# 本地临时文件
+*.exit
+_*.txt
+.wbapp_*.genie

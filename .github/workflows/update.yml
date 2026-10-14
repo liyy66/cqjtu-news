@@ -1,0 +1,101 @@
+name: 抓取重庆交通大学新闻网
+
+# 每 6 小时一次。cron 用 UTC：UTC 01/07/13/19 点
+# =北京时间 09/15/21/03 点，覆盖学校白天与傍晚的发稿时段。
+on:
+  schedule:
+    - cron: '17 1,7,13,19 * * *'
+  # 也可手动触发，用来验证链路
+  workflow_dispatch:
+
+# 同一时间只跑一个，避免两次抓取互相覆盖 news.json
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # 提交数据变更
+  pages: write      # 发布 Pages
+  id-token: write   # Pages 部署所需的令牌
+
+jobs:
+  update:
+    name: 抓取并发布
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 恢复上一轮抓取状态
+        run: |
+          # state/news.jsonl 是增量基线。有它则只抓新增文章；
+          # 没有则退化为全量重抓（仅首次运行，耗时较长属正常）。
+          if [ -f state/news.jsonl ]; then
+            python scripts/repo_state.py import
+          else
+            echo "首次运行：执行全量抓取，耗时较长，属正常现象"
+            mkdir -p data
+            echo '[]' > data/news.json
+          fi
+
+      - name: 增量抓取并重新打包
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONUTF8: '1'
+          TZ: Asia/Shanghai
+        run: |
+          python scripts/daily_update.py
+          python scripts/repo_state.py export
+
+      - name: 生成提交信息并记录报告
+        id: report
+        run: |
+          cat data/_last_update.json
+          echo "---"
+          python - <<'PY' > commit_msg.txt
+          import json
+          r = json.load(open('data/_last_update.json', encoding='utf-8'))
+          print("data: +%d篇 / 共%d篇 / 最新 %s / 失败%d"
+                % (r['newFetched'], r['total'], r['newestDate'], r['failed']))
+          PY
+          cat commit_msg.txt
+
+      - name: 提交数据变更
+        id: commit
+        run: |
+          git config user.name  "cqjtu-news-bot"
+          git config user.email "cqjtu-news-bot@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "本轮无新增新闻，跳过提交与部署"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -F commit_msg.txt
+            git push
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 上传静态站点
+        if: steps.commit.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: 发布到 GitHub Pages
+        if: steps.commit.outputs.changed == 'true'
+        uses: actions/deploy-pages@v4
