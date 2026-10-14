@@ -14,7 +14,7 @@
 # ============================================================
 
 $ErrorActionPreference = "Stop"
-$YourUsername = "YOUR_USERNAME_HERE"
+$YourUsername = "liyy66"
 $Repo        = "cqjtu-news"
 
 if ($YourUsername -eq "YOUR_USERNAME_HERE") {
