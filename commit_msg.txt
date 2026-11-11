@@ -1,1 +1,1 @@
-data: +0 / total 2722 / latest 2026-11-10 / failed 0
+data: +25 / total 2747 / latest 2026-11-11 / failed 0
